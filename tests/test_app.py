@@ -4,7 +4,7 @@ from app.main import app
 def test_index():
     response = app.test_client().get("/")
     assert response.status_code == 200
-    assert response.get_json()["message"] == "Hello from my CD pipeline! 🚀"
+    assert response.get_json()["message"] == "Hello again from CI/CD!"
 
 
 def test_health():
