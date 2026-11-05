@@ -22,7 +22,7 @@ def index():
 
 @app.get("/health")
 def health():
-    return jsonify(status="broken")
+    return jsonify(status="ok")
 
 
 @app.get("/metrics")
