@@ -69,7 +69,7 @@ jobs:
           IMAGE="ghcr.io/${GITHUB_REPOSITORY,,}:${GITHUB_SHA}"
           echo "Deploying $IMAGE"
           sed "s|image: .*devops-demo:latest|image: ${IMAGE}|" k8s/app.yaml | kubectl apply -f -
-          kubectl rollout status deployment/devops-demo --timeout=180s
+          kubectl rollout status deployment/devops-demo --timeout=300s
 
       - name: Smoke test
         run: |
