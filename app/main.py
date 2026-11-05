@@ -14,7 +14,7 @@ VERSION = os.getenv("APP_VERSION", "dev")
 def index():
     REQUESTS.labels(endpoint="/").inc()
     return jsonify(
-        message="Hello from DevOps demo!",
+        message="Hello from my CD pipeline! 🚀",
         version=VERSION,
         host=socket.gethostname(),
     )

@@ -53,3 +53,25 @@ jobs:
           tags: |
             ${{ env.IMAGE }}:latest
             ${{ env.IMAGE }}:${{ github.sha }}
+
+  deploy:
+    name: Deploy to kind
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: [self-hosted, kind]
+    env:
+      KUBECONFIG: /home/openonevm/.kube/config
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Deploy new image
+        run: |
+          IMAGE="ghcr.io/${GITHUB_REPOSITORY,,}:${GITHUB_SHA}"
+          echo "Deploying $IMAGE"
+          sed "s|image: .*devops-demo:latest|image: ${IMAGE}|" k8s/app.yaml | kubectl apply -f -
+          kubectl rollout status deployment/devops-demo --timeout=180s
+
+      - name: Smoke test
+        run: |
+          curl -sf localhost:30080/health
+          curl -s localhost:30080 | grep -q "$GITHUB_SHA" && echo "New version is live: $GITHUB_SHA"
